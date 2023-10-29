@@ -1,4 +1,4 @@
 @echo off
 pushd build\standalone\
-Debug\Template.exe
+Debug\lunar_rescue_game_state.exe
 popd

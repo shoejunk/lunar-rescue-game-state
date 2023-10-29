@@ -1,11 +1,11 @@
-# template
+# lunar_rescue_game_state
 
 cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
 # ---- Project ----
 
 project(
-	template
+	lunar_rescue_game_state
 	VERSION 0.1.0
 	LANGUAGES CXX)
 
@@ -25,6 +25,13 @@ include(${CPM_DOWNLOAD_LOCATION})
 # PackageProject.cmake will be used to make our target installable
 CPMAddPackage("gh:TheLartians/PackageProject.cmake@1.8.0")
 
+# Add package: shoejunk/input
+CPMAddPackage(
+	NAME input
+	GITHUB_REPOSITORY shoejunk/input
+	VERSION 1.1.0
+)
+
 # ---- Add source files ----
 file(GLOB_RECURSE sources CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/source/*.ixx")
 
@@ -37,6 +44,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 23)
 
 # being a cross-platform target, we enforce standards conformance on MSVC
 target_compile_options(${PROJECT_NAME} PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive-;/experimental:module>")
+
+target_link_libraries(${PROJECT_NAME} input)
 
 target_include_directories(
   ${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
