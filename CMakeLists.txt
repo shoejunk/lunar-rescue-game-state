@@ -29,7 +29,14 @@ CPMAddPackage("gh:TheLartians/PackageProject.cmake@1.8.0")
 CPMAddPackage(
 	NAME input
 	GITHUB_REPOSITORY shoejunk/input
-	VERSION 1.1.0
+	VERSION 1.1.1
+)
+
+# Add package: shoejunk/math
+CPMAddPackage(
+	NAME math
+	GITHUB_REPOSITORY shoejunk/math
+	VERSION 3.1.0
 )
 
 # ---- Add source files ----
