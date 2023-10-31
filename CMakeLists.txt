@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
 project(
 	lunar_rescue_game_state
-	VERSION 0.1.0
+	VERSION 0.2.0
 	LANGUAGES CXX)
 
 # ---- Fetch CPM ----
@@ -25,6 +25,13 @@ include(${CPM_DOWNLOAD_LOCATION})
 # PackageProject.cmake will be used to make our target installable
 CPMAddPackage("gh:TheLartians/PackageProject.cmake@1.8.0")
 
+# Add package: shoejunk/hash
+CPMAddPackage(
+	NAME hash
+	GITHUB_REPOSITORY shoejunk/hash
+	VERSION 6.0.1
+)
+
 # Add package: shoejunk/input
 CPMAddPackage(
 	NAME input
@@ -36,7 +43,7 @@ CPMAddPackage(
 CPMAddPackage(
 	NAME math
 	GITHUB_REPOSITORY shoejunk/math
-	VERSION 3.1.0
+	VERSION 3.2.0
 )
 
 # ---- Add source files ----
@@ -52,7 +59,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 23)
 # being a cross-platform target, we enforce standards conformance on MSVC
 target_compile_options(${PROJECT_NAME} PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive-;/experimental:module>")
 
-target_link_libraries(${PROJECT_NAME} input)
+target_link_libraries(${PROJECT_NAME} hash input math)
 
 target_include_directories(
   ${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
