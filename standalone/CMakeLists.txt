@@ -30,6 +30,13 @@ CPMAddPackage(
 	VERSION 1.1.1
 )
 
+# Add package: shoejunk/log
+CPMAddPackage(
+	NAME log
+	GITHUB_REPOSITORY shoejunk/log
+	VERSION 1.1.0
+)
+
 # ---- Create standalone executable ----
 
 file(GLOB sources CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp)
@@ -38,4 +45,4 @@ add_executable(${PROJECT_NAME} ${sources})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 23 OUTPUT_NAME "lunar_rescue_game_state")
 
-target_link_libraries(${PROJECT_NAME} lunar_rescue_game_state cxxopts input)
+target_link_libraries(${PROJECT_NAME} lunar_rescue_game_state cxxopts input log)

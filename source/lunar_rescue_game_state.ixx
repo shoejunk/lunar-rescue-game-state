@@ -16,6 +16,11 @@ namespace lunar_rescue
 			m_rocket.update(input);
 		}
 
+		c_rocket const& rocket() const
+		{
+			return m_rocket;
+		}
+
 	private:
 		c_rocket m_rocket;
 	};

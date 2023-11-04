@@ -53,6 +53,11 @@ namespace lunar_rescue
 			m_pos += m_vel;
 		}
 
+		c_vec2i const& pos() const
+		{
+			return m_pos;
+		}
+
 	private:
 		c_vec2i m_pos;
 		c_vec2i m_vel;
