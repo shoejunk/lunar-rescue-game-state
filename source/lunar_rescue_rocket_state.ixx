@@ -15,7 +15,7 @@ namespace lunar_rescue
 		static constexpr int32_t lateral_acc = 5;
 		static constexpr int32_t vertical_acc = 10;
 		static constexpr int32_t gravity = 1;
-		static constexpr int32_t unit_per_pixel = 256;
+		static constexpr int32_t unit_per_pixel = 65536;
 
 	public:
 		c_rocket()
@@ -60,7 +60,7 @@ namespace lunar_rescue
 
 		c_vec2f screen_pos() const
 		{
-			return c_vec2f(m_pos) / unit_per_pixel;
+			return c_vec2f(m_pos * c_vec2i(1, -1)) / unit_per_pixel;
 		}
 
 	private:
