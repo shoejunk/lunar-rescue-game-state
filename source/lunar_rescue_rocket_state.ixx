@@ -58,6 +58,11 @@ namespace lunar_rescue
 			return m_pos;
 		}
 
+		c_vec2f screen_pos() const
+		{
+			return c_vec2f(m_pos) / unit_per_pixel;
+		}
+
 	private:
 		c_vec2i m_pos;
 		c_vec2i m_vel;
