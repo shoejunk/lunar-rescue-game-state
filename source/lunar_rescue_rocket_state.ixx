@@ -73,13 +73,13 @@ namespace lunar_rescue
 			if (input["left"_h])
 			{
 				acc.x() -= lateral_acc;
-				m_rot.angle() -= rot_speed;
+				//m_rot.angle() -= rot_speed;
 			}
 
 			if (input["right"_h])
 			{
 				acc.x() += lateral_acc;
-				m_rot.angle() += rot_speed;
+				//m_rot.angle() += rot_speed;
 			}
 
 			if (input["rocket"_h])
@@ -90,6 +90,8 @@ namespace lunar_rescue
 			acc.y() -= gravity;
 			m_vel += acc;
 			m_pos += m_vel;
+			c_vec2i const& mouse = input.mouse();
+			m_rot.angle() = (int16_t)std::atan2f((float)mouse.y(), (float)mouse.x()) * std::numeric_limits<int16_t>::max() / (numbers::pi_v<float> * 2.f);
 		}
 
 		c_vec2i const& pos() const
@@ -97,9 +99,9 @@ namespace lunar_rescue
 			return m_pos;
 		}
 
-		c_vec2f screen_pos() const
+		c_vec2i screen_pos() const
 		{
-			return c_vec2f(m_pos * c_vec2i(1, -1)) / unit_per_pixel;
+			return c_vec2i(m_pos * c_vec2i(1, -1)) / unit_per_pixel;
 		}
 
 		uint8_t phase_start() const
