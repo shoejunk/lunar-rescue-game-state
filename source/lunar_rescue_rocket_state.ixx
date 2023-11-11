@@ -46,11 +46,9 @@ namespace lunar_rescue
 	export class c_rocket
 	{
 	private:
-		static constexpr int32_t lateral_acc = 16;
-		static constexpr int32_t vertical_acc = 16;
-		static constexpr int32_t gravity = 4;
+		static constexpr int32_t vertical_acc = 32;
+		static constexpr int32_t gravity = 8;
 		static constexpr int32_t unit_per_pixel = 8192;
-		static constexpr int32_t rot_speed = 128;
 
 	public:
 		c_rocket()
@@ -69,29 +67,21 @@ namespace lunar_rescue
 
 		void update(stk::c_input const& input)
 		{
-			c_vec2i acc(0, 0);
-			if (input["left"_h])
-			{
-				acc.x() -= lateral_acc;
-				//m_rot.angle() -= rot_speed;
-			}
+			c_vec2i const& to_mouse = input.mouse() - screen_pos();
+			m_rot.angle() = std::atan2f((float)to_mouse.y(), (float)to_mouse.x()) * std::numeric_limits<int16_t>::max() / (numbers::pi_v<float> *2.f) + std::numeric_limits<int16_t>::max() / 4;
 
-			if (input["right"_h])
-			{
-				acc.x() += lateral_acc;
-				//m_rot.angle() += rot_speed;
-			}
+			c_vec2i acc(0, 0);
 
 			if (input["rocket"_h])
 			{
-				acc.y() += vertical_acc;
+				atan2f((float)m_vel.x(), (float)m_vel.y());
+				acc += c_vec2i{ (int32_t)(cosf(m_rot.angle_rad() + numbers::pi_v<float> / 2.f) * -vertical_acc),
+					(int32_t)(sinf(m_rot.angle_rad() + numbers::pi_v<float> / 2.f) * vertical_acc) };
 			}
 
 			acc.y() -= gravity;
 			m_vel += acc;
 			m_pos += m_vel;
-			c_vec2i const& mouse = input.mouse();
-			m_rot.angle() = (int16_t)std::atan2f((float)mouse.y(), (float)mouse.x()) * std::numeric_limits<int16_t>::max() / (numbers::pi_v<float> * 2.f);
 		}
 
 		c_vec2i const& pos() const
