@@ -2,6 +2,7 @@ export module lunar_rescue.game_state;
 
 export import :rocket;
 
+import std.core;
 import stk.input;
 
 using namespace stk;
@@ -23,5 +24,6 @@ namespace lunar_rescue
 
 	private:
 		c_rocket m_rocket;
+		std::vector<c_bullet> m_bullets;
 	};
 }
