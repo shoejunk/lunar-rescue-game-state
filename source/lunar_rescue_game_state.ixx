@@ -12,6 +12,11 @@ namespace lunar_rescue
 	export class c_game_state
 	{
 	public:
+		c_game_state()
+			: m_rocket(m_bullets)
+		{
+		}
+
 		void update(c_input const& input)
 		{
 			m_rocket.update(input);
