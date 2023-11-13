@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
 project(
 	lunar_rescue_game_state
-	VERSION 0.9.0
+	VERSION 0.9.1
 	LANGUAGES CXX)
 
 # ---- Fetch CPM ----
