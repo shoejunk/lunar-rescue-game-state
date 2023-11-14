@@ -27,6 +27,11 @@ namespace lunar_rescue
 			return m_rocket;
 		}
 
+		std::vector<c_bullet> const& bullets() const
+		{
+			return m_bullets;
+		}
+
 	private:
 		c_rocket m_rocket;
 		std::vector<c_bullet> m_bullets;
