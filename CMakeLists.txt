@@ -36,14 +36,14 @@ CPMAddPackage(
 CPMAddPackage(
 	NAME input
 	GITHUB_REPOSITORY shoejunk/input
-	VERSION 1.3.1
+	VERSION 1.4.0
 )
 
 # Add package: shoejunk/math
 CPMAddPackage(
 	NAME math
 	GITHUB_REPOSITORY shoejunk/math
-	VERSION 3.5.0
+	VERSION 4.0.0
 )
 
 # Add package: shoejunk/log

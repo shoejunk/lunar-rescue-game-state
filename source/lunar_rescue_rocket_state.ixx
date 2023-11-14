@@ -46,13 +46,15 @@ namespace lunar_rescue
 	export class c_bullet
 	{
 	public:
-		c_bullet()
+		c_bullet(c_hash id)
 			: m_pos(0, 0)
+			, m_id(id)
 		{
 		}
 
-		c_bullet(c_vec2i pos)
+		c_bullet(c_hash id, c_vec2i pos)
 			: m_pos(pos)
+			, m_id(id)
 		{
 		}
 
@@ -64,6 +66,11 @@ namespace lunar_rescue
 		c_vec2i const& pos() const
 		{
 			return m_pos;
+		}
+
+		c_hash id() const
+		{
+			return m_id;
 		}
 
 		c_vec2i screen_pos() const
@@ -83,6 +90,7 @@ namespace lunar_rescue
 
 	private:
 		c_vec2i m_pos;
+		c_hash m_id;
 	};
 
 	export class c_rocket
@@ -129,7 +137,7 @@ namespace lunar_rescue
 
 			if (input["fire"_h])
 			{
-				m_bullets.push_back(c_bullet(m_pos));
+				m_bullets.push_back(c_bullet(c_hash(m_rand.rand_int<uint32_t>()), m_pos));
 				m_fire_cooldown = fire_cooldown;
 			}
 
@@ -174,5 +182,6 @@ namespace lunar_rescue
 		c_rot m_rot;
 		vector<c_bullet>& m_bullets;
 		uint32_t m_fire_cooldown;
+		c_rand m_rand;
 	};
 }
