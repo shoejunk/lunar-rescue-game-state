@@ -45,27 +45,37 @@ namespace lunar_rescue
 
 	export class c_bullet
 	{
+	private:
+		static constexpr int32_t unit_per_pixel = 8192;
+
 	public:
 		c_bullet(c_hash id)
 			: m_pos(0, 0)
+			, m_rot(0)
 			, m_id(id)
 		{
 		}
 
-		c_bullet(c_hash id, c_vec2i pos)
+		c_bullet(c_hash id, c_vec2i pos, c_rot rot)
 			: m_pos(pos)
+			, m_rot(rot)
 			, m_id(id)
 		{
 		}
 
 		void update()
 		{
-			m_pos += c_vec2i{ 0, 1 };
+			m_pos += c_vec2i{ 16384, 0 };
 		}
 
 		c_vec2i const& pos() const
 		{
 			return m_pos;
+		}
+
+		c_rot const& rot() const
+		{
+			return m_rot;
 		}
 
 		c_hash id() const
@@ -75,7 +85,7 @@ namespace lunar_rescue
 
 		c_vec2i screen_pos() const
 		{
-			return m_pos / 8192;
+			return c_vec2i(m_pos * c_vec2i(1, -1)) / unit_per_pixel;
 		}
 
 		uint8_t phase_start() const
@@ -90,6 +100,7 @@ namespace lunar_rescue
 
 	private:
 		c_vec2i m_pos;
+		c_rot m_rot;
 		c_hash m_id;
 	};
 
@@ -135,7 +146,7 @@ namespace lunar_rescue
 					(int32_t)(sinf(m_rot.angle_rad() + numbers::pi_v<float> / 2.f) * vertical_acc) };
 			}
 
-			if (input["fire"_h])
+			if (input["fire"_h] && m_fire_cooldown == 0)
 			{
 				m_bullets.push_back(c_bullet(c_hash(m_rand.rand_int<uint32_t>()), m_pos));
 				m_fire_cooldown = fire_cooldown;

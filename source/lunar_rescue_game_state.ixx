@@ -20,6 +20,10 @@ namespace lunar_rescue
 		void update(c_input const& input)
 		{
 			m_rocket.update(input);
+			for (auto& bullet : m_bullets)
+			{
+				bullet.update();
+			}
 		}
 
 		c_rocket const& rocket() const
