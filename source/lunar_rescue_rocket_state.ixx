@@ -11,38 +11,6 @@ using namespace stk;
 
 namespace lunar_rescue
 {
-	class c_rot
-	{
-	public:
-		c_rot()
-			: m_angle(0)
-		{
-		}
-
-		c_rot(int16_t angle)
-			: m_angle(angle)
-		{
-		}
-
-		int16_t angle() const
-		{
-			return m_angle;
-		}
-
-		int16_t& angle()
-		{
-			return m_angle;
-		}
-
-		float angle_rad() const
-		{
-			return (float)m_angle * numbers::pi_v<float> *2.f / (float)std::numeric_limits<int16_t>::max();
-		}
-
-	private:
-		int16_t m_angle;
-	};
-
 	export class c_bullet
 	{
 	private:
@@ -185,6 +153,11 @@ namespace lunar_rescue
 		float rot_rad() const
 		{
 			return m_rot.angle_rad();
+		}
+
+		float rot_deg() const
+		{
+			return m_rot.angle_deg();
 		}
 
 	private:
