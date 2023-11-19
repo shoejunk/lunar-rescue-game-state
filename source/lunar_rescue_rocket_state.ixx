@@ -46,6 +46,16 @@ namespace lunar_rescue
 			return m_rot;
 		}
 
+		float rot_rad() const
+		{
+			return m_rot.angle_rad();
+		}
+
+		float rot_deg() const
+		{
+			return m_rot.angle_deg();
+		}
+
 		c_hash id() const
 		{
 			return m_id;
