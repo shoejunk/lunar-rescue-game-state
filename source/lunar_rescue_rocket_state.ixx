@@ -113,8 +113,7 @@ namespace lunar_rescue
 		{
 			m_fire_cooldown = m_fire_cooldown > 0 ? m_fire_cooldown - 1 : 0;
 			c_vec2i const& to_mouse = input.mouse() - screen_pos();
-			m_rot.angle() = std::atan2f((float)to_mouse.y(),
-				(float)to_mouse.x()) * std::numeric_limits<int16_t>::max() / (numbers::pi_v<float> *2.f) + std::numeric_limits<int16_t>::max() / 4;
+			m_rot.angle() = std::atan2f((float)to_mouse.y(), (float)to_mouse.x()) * c_rot::deg_180 / numbers::pi_v<float> + c_rot::deg_90;
 			c_vec2i acc(0, 0);
 
 			if (input["rocket"_h])
