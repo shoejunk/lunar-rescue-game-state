@@ -126,7 +126,7 @@ namespace lunar_rescue
 
 			if (input["fire"_h] && m_fire_cooldown == 0)
 			{
-				m_bullets.emplace_back(c_hash(m_rand.rand_int<uint32_t>()), m_pos, m_rot);
+				m_bullets.emplace_back(c_hash(m_rand.rand_int<uint32_t>()), m_pos, m_rot + c_rot::from_deg(90.f));
 				m_fire_cooldown = fire_cooldown;
 			}
 
