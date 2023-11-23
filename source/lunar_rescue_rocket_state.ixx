@@ -91,8 +91,9 @@ namespace lunar_rescue
 		static constexpr int32_t vertical_acc = 32;
 		static constexpr int32_t gravity = 8;
 		static constexpr int32_t unit_per_pixel = 8192;
-		static constexpr uint32_t fire_cooldown = 720;
+		static constexpr uint32_t fire_cooldown = 90;
 		static constexpr c_vec2i fire_offset = c_vec2i{ 0, 100 * unit_per_pixel };
+		static constexpr int32_t bullet_speed = 40960;
 
 	public:
 		c_rocket(vector<c_bullet>& bullets)
@@ -132,7 +133,7 @@ namespace lunar_rescue
 			{
 				c_vec2i pos =
 					m_pos + c_vec2i{ (int32_t)(sinf(m_rot.angle_rad()) * fire_offset.y()), (int32_t)(cosf(m_rot.angle_rad()) * fire_offset.y()) };
-				c_vec2i vel = c_vec2i{ (int32_t)(sinf(m_rot.angle_rad()) * 8192.f), (int32_t)(cosf(m_rot.angle_rad()) * 8192.f) };
+				c_vec2i vel = c_vec2i{ (int32_t)(sinf(m_rot.angle_rad()) * bullet_speed), (int32_t)(cosf(m_rot.angle_rad()) * bullet_speed) };
 				m_bullets.emplace_back(c_hash(m_rand.rand_int<uint32_t>()), pos, vel, m_rot + c_rot::from_deg(90.f));
 				m_fire_cooldown = fire_cooldown;
 			}
