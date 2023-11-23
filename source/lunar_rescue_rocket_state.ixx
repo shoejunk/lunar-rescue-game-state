@@ -19,21 +19,23 @@ namespace lunar_rescue
 	public:
 		c_bullet(c_hash id)
 			: m_pos(0, 0)
+			, m_vel(0, 0)
 			, m_rot(0)
 			, m_id(id)
 		{
 		}
 
-		c_bullet(c_hash id, c_vec2i pos, c_rot rot)
+		c_bullet(c_hash id, c_vec2i pos, c_vec2i vel, c_rot rot)
 			: m_pos(pos)
-			, m_rot(rot)
+			, m_vel(vel)
 			, m_id(id)
+			, m_rot(rot)
 		{
 		}
 
 		void update()
 		{
-			m_pos += c_vec2i{ 16384, 0 };
+			m_pos += m_vel;
 		}
 
 		c_vec2i const& pos() const
@@ -78,8 +80,9 @@ namespace lunar_rescue
 
 	private:
 		c_vec2i m_pos;
-		c_rot m_rot;
+		c_vec2i m_vel;
 		c_hash m_id;
+		c_rot m_rot;
 	};
 
 	export class c_rocket
@@ -89,6 +92,7 @@ namespace lunar_rescue
 		static constexpr int32_t gravity = 8;
 		static constexpr int32_t unit_per_pixel = 8192;
 		static constexpr uint32_t fire_cooldown = 720;
+		static constexpr c_vec2i fire_offset = c_vec2i{ 0, 100 * unit_per_pixel };
 
 	public:
 		c_rocket(vector<c_bullet>& bullets)
@@ -113,19 +117,23 @@ namespace lunar_rescue
 		{
 			m_fire_cooldown = m_fire_cooldown > 0 ? m_fire_cooldown - 1 : 0;
 			c_vec2i const& to_mouse = input.mouse() - screen_pos();
-			m_rot.angle() = std::atan2f((float)to_mouse.y(), (float)to_mouse.x()) * c_rot::deg_180 / numbers::pi_v<float> + c_rot::deg_90;
+			m_rot.angle() =
+				c_rot::wrap(std::atan2f((float)to_mouse.y(), (float)to_mouse.x()) * c_rot::deg_180 / numbers::pi_v<float> +c_rot::deg_90);
+
 			c_vec2i acc(0, 0);
 
 			if (input["rocket"_h])
 			{
-				atan2f((float)m_vel.x(), (float)m_vel.y());
 				acc += c_vec2i{ (int32_t)(cosf(m_rot.angle_rad() + numbers::pi_v<float> / 2.f) * -vertical_acc),
 					(int32_t)(sinf(m_rot.angle_rad() + numbers::pi_v<float> / 2.f) * vertical_acc) };
 			}
 
 			if (input["fire"_h] && m_fire_cooldown == 0)
 			{
-				m_bullets.emplace_back(c_hash(m_rand.rand_int<uint32_t>()), m_pos, m_rot + c_rot::from_deg(90.f));
+				c_vec2i pos =
+					m_pos + c_vec2i{ (int32_t)(sinf(m_rot.angle_rad()) * fire_offset.y()), (int32_t)(cosf(m_rot.angle_rad()) * fire_offset.y()) };
+				c_vec2i vel = c_vec2i{ (int32_t)(sinf(m_rot.angle_rad()) * 8192.f), (int32_t)(cosf(m_rot.angle_rad()) * 8192.f) };
+				m_bullets.emplace_back(c_hash(m_rand.rand_int<uint32_t>()), pos, vel, m_rot + c_rot::from_deg(90.f));
 				m_fire_cooldown = fire_cooldown;
 			}
 
