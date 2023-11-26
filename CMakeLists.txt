@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
 project(
 	lunar_rescue_game_state
-	VERSION 0.17.0
+	VERSION 0.18.0
 	LANGUAGES CXX)
 
 # ---- Fetch CPM ----
@@ -36,14 +36,14 @@ CPMAddPackage(
 CPMAddPackage(
 	NAME input
 	GITHUB_REPOSITORY shoejunk/input
-	VERSION 1.8.0
+	VERSION 1.10.0
 )
 
 # Add package: shoejunk/math
 CPMAddPackage(
 	NAME math
 	GITHUB_REPOSITORY shoejunk/math
-	VERSION 4.5.0
+	VERSION 4.6.0
 )
 
 # Add package: shoejunk/log
