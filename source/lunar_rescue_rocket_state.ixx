@@ -5,21 +5,68 @@ import stk.hash;
 import stk.input;
 import stk.log;
 import stk.math;
+import <SFML/Graphics/Image.hpp>;
+import <SFML/Graphics/Texture.hpp>;
 
 using namespace std;
 using namespace stk;
 
+constexpr int32_t units_per_pixel = 8192;
+
 namespace lunar_rescue
 {
+	export class c_game_object
+	{
+	public:
+		c_game_object(c_hash id)
+			: m_id(id)
+		{
+		}
+
+		c_game_object(c_hash id, c_vec2i pos, c_vec2i extents)
+			: m_pos(pos)
+			, m_extents(extents)
+			, m_id(id)
+		{
+		}
+
+	private:
+		c_vec2i m_pos;
+		c_vec2i m_extents;
+		c_hash m_id;
+	};
+
+	export class c_game_piece : public c_game_object
+	{
+	public:
+		c_game_piece(c_hash id)
+			: c_game_object(id)
+		{
+		}
+
+		c_game_piece(c_hash id, c_vec2i pos, c_vec2i extents)
+			: c_game_object(id, pos, extents)
+		{
+		}
+
+	private:
+		sf::Image m_image;
+
+	};
+
 	export class c_block
 	{
 	private:
-		static constexpr int32_t unit_per_pixel = 8192;
-		static constexpr c_vec2i size = c_vec2i{ 304 * unit_per_pixel, 304 * unit_per_pixel };
+		static constexpr c_vec2i size = c_vec2i{ 128 * units_per_pixel, 128 * units_per_pixel };
 
 	public:
+		c_block()
+			: m_pos(64 * units_per_pixel, -64 * units_per_pixel)
+		{
+		}
+
 		c_block(c_hash id)
-			: m_pos(0, 0)
+			: m_pos(64 * units_per_pixel, -64 * units_per_pixel)
 			, m_id(id)
 		{
 		}
@@ -42,7 +89,7 @@ namespace lunar_rescue
 
 		c_vec2i screen_pos() const
 		{
-			return c_vec2i(m_pos * c_vec2i(1, -1)) / unit_per_pixel;
+			return c_vec2i(m_pos * c_vec2i(1, -1)) / units_per_pixel;
 		}
 
 		c_vec2i const& get_size() const
@@ -58,7 +105,7 @@ namespace lunar_rescue
 	export class c_bullet
 	{
 	private:
-		static constexpr int32_t unit_per_pixel = 8192;
+		static constexpr int32_t unist_per_pixel = 8192;
 
 	public:
 		c_bullet(c_hash id)
@@ -109,7 +156,7 @@ namespace lunar_rescue
 
 		c_vec2i screen_pos() const
 		{
-			return c_vec2i(m_pos * c_vec2i(1, -1)) / unit_per_pixel;
+			return c_vec2i(m_pos * c_vec2i(1, -1)) / units_per_pixel;
 		}
 
 		uint8_t phase_start() const
@@ -132,13 +179,12 @@ namespace lunar_rescue
 	export class c_rocket
 	{
 	private:
-		static constexpr int32_t vertical_acc = 32;
-		static constexpr int32_t gravity = 8;
-		static constexpr int32_t unit_per_pixel = 8192;
-		static constexpr uint32_t fire_cooldown = 90;
-		static constexpr c_vec2i fire_offset = c_vec2i{ 0, 100 * unit_per_pixel };
+		static constexpr int32_t vertical_acc = 64;
+		static constexpr int32_t gravity = 16;
+		static constexpr uint32_t fire_cooldown = 45;
+		static constexpr c_vec2i fire_offset = c_vec2i{ 0, 42 * units_per_pixel };
 		static constexpr int32_t bullet_speed = 40960;
-		static constexpr c_vec2i size = c_vec2i{ 304 * unit_per_pixel, 304 * unit_per_pixel };
+		static constexpr c_vec2i size = c_vec2i{ 128 * units_per_pixel, 128 * units_per_pixel };
 
 	public:
 		c_rocket(vector<c_bullet>& bullets)
@@ -210,7 +256,7 @@ namespace lunar_rescue
 
 		c_vec2i screen_pos() const
 		{
-			return c_vec2i(m_pos * c_vec2i(1, -1)) / unit_per_pixel;
+			return c_vec2i(m_pos * c_vec2i(1, -1)) / units_per_pixel;
 		}
 
 		c_vec2i const get_size() const
@@ -243,7 +289,18 @@ namespace lunar_rescue
 			return m_rot.angle_deg();
 		}
 
+		void image(sf::Texture const& texture)
+		{
+			m_image = texture.copyToImage();
+		}
+
+		sf::Image const& image() const
+		{
+			return m_image;
+		}
+
 	private:
+		sf::Image m_image;
 		c_vec2i m_pos;
 		c_vec2i m_vel;
 		c_rot m_rot;

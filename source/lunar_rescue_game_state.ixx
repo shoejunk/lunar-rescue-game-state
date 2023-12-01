@@ -10,8 +10,6 @@ using namespace stk;
 
 namespace lunar_rescue
 {
-	constexpr int32_t units_per_pixel = 8192;
-
 	export template<class T, class U>
 		bool overlaps(T const& a, U const& b)
 	{
@@ -24,6 +22,7 @@ namespace lunar_rescue
 		c_game_state()
 			: m_rocket(m_bullets)
 			, m_block("block"_h)
+			, m_update_count(0)
 		{
 		}
 
@@ -35,9 +34,15 @@ namespace lunar_rescue
 				bullet.update();
 			}
 
+			if (m_update_count++ == 60)
+			{
+				auto y_dist = std::abs(m_rocket.pos().y() - m_block.pos().y()) / 8192;
+				m_update_count = 0;
+			}
+
 			if (overlaps(m_rocket, m_block))
 			{
-				m_rocket.pos({ 320 * units_per_pixel, -320 * units_per_pixel });
+				m_rocket.pos({ 320 * 8192, -320 * 8192 });
 				m_rocket.vel({ 0, 0 });
 			}
 		}
@@ -56,5 +61,6 @@ namespace lunar_rescue
 		c_rocket m_rocket;
 		std::vector<c_bullet> m_bullets;
 		c_block m_block;
+		uint8_t m_update_count;
 	};
 }
