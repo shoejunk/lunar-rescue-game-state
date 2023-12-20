@@ -25,32 +25,44 @@ include(${CPM_DOWNLOAD_LOCATION})
 # PackageProject.cmake will be used to make our target installable
 CPMAddPackage("gh:TheLartians/PackageProject.cmake@1.8.0")
 
+# Add package: shoejunk/collide
+CPMAddPackage(
+	NAME collide
+	GITHUB_REPOSITORY shoejunk/collide
+	#VERSION 1.0.0
+	GIT_TAG main
+)
+
 # Add package: shoejunk/hash
 CPMAddPackage(
 	NAME hash
 	GITHUB_REPOSITORY shoejunk/hash
-	VERSION 6.0.1
+	#VERSION 6.0.1
+	GIT_TAG main
 )
 
 # Add package: shoejunk/input
 CPMAddPackage(
 	NAME input
 	GITHUB_REPOSITORY shoejunk/input
-	VERSION 1.10.0
+	#VERSION 1.11.0
+	GIT_TAG main
 )
 
 # Add package: shoejunk/math
 CPMAddPackage(
 	NAME math
 	GITHUB_REPOSITORY shoejunk/math
-	VERSION 4.6.0
+	#VERSION 4.9.0
+	GIT_TAG main
 )
 
 # Add package: shoejunk/log
 CPMAddPackage(
 	NAME log
 	GITHUB_REPOSITORY shoejunk/log
-	VERSION 1.3.0
+	#VERSION 1.3.0
+	GIT_TAG main
 )
 
 # ---- Add source files ----

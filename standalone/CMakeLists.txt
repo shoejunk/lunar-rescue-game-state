@@ -27,14 +27,16 @@ CPMAddPackage(NAME lunar_rescue_game_state SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/
 CPMAddPackage(
 	NAME input
 	GITHUB_REPOSITORY shoejunk/input
-	VERSION 1.5.0
+	#VERSION 1.5.0
+	GIT_TAG main
 )
 
 # Add package: shoejunk/log
 CPMAddPackage(
 	NAME log
 	GITHUB_REPOSITORY shoejunk/log
-	VERSION 1.1.0
+	#VERSION 1.1.0
+	GIT_TAG main
 )
 
 # ---- Create standalone executable ----
