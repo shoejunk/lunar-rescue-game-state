@@ -1,6 +1,7 @@
 export module lunar_rescue.game_state:rocket;
 
 import std.core;
+import stk.collide;
 import stk.hash;
 import stk.input;
 import stk.log;
@@ -292,6 +293,7 @@ namespace lunar_rescue
 		void image(sf::Texture const& texture)
 		{
 			m_image = texture.copyToImage();
+			m_collision.from(m_image);
 		}
 
 		sf::Image const& image() const
@@ -301,7 +303,7 @@ namespace lunar_rescue
 
 	private:
 		sf::Image m_image;
-
+		c_collision_mask m_collision;
 		c_vec2i m_pos;
 		c_vec2i m_vel;
 		c_rot m_rot;
