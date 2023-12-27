@@ -40,7 +40,15 @@ namespace lunar_rescue
 	requires has_collision_mask<T> && has_collision_mask<U> && has_pos<T> && has_pos<U>
 	bool overlaps(T const& a, U const& b)
 	{
-		a.collision_mask().overlaps(b.collision_mask(), b.pos() - a.pos());
+		return a.collision_mask().overlaps(b.collision_mask(), b.pos() - a.pos());
+	}
+
+	// If the types have both sizes and collision masks, use the collision masks.
+	export template<class T, class U>
+	requires has_collision_mask<T>&& has_collision_mask<U>&& has_pos<T>&& has_pos<U> && has_size<T>&& has_size<U>
+	bool overlaps(T const& a, U const& b)
+	{
+		return a.collision_mask().overlaps(b.collision_mask(), b.pos() - a.pos());
 	}
 
 	export class c_game_state

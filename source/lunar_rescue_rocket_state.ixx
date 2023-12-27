@@ -111,19 +111,16 @@ namespace lunar_rescue
 		c_rot m_rot;
 	};
 
-	export class c_block
+	export class c_block : public c_game_piece
 	{
-	private:
-		static constexpr c_vec2i block_size = c_vec2i{ 128 * units_per_pixel, 128 * units_per_pixel };
-
 	public:
 		c_block()
-			: m_pos(64 * units_per_pixel, -64 * units_per_pixel)
+			: c_game_piece(c_vec2i{ 64 * units_per_pixel, -64 * units_per_pixel })
 		{
 		}
 
 		c_block(c_hash id)
-			: m_pos(64 * units_per_pixel, -64 * units_per_pixel)
+			: c_game_piece(c_vec2i{ 64 * units_per_pixel, -64 * units_per_pixel })
 			, m_id(id)
 		{
 		}
@@ -134,24 +131,9 @@ namespace lunar_rescue
 		{
 		}
 
-		c_vec2i const& pos() const
-		{
-			return m_pos;
-		}
-
 		c_hash id() const
 		{
 			return m_id;
-		}
-
-		c_vec2i screen_pos() const
-		{
-			return c_vec2i(m_pos * c_vec2i(1, -1)) / units_per_pixel;
-		}
-
-		c_vec2i size() const
-		{
-			return block_size;
 		}
 
 	private:
