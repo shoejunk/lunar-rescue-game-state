@@ -70,6 +70,7 @@ namespace lunar_rescue
 		void rot(c_rot rot)
 		{
 			m_rot = rot;
+			m_rotated_collision = m_collision.rotate(rot);
 		}
 
 		void accelerate_by(c_vec2i acc)
@@ -86,6 +87,7 @@ namespace lunar_rescue
 		{
 			m_image = texture.copyToImage();
 			m_collision.from(m_image, units_per_pixel);
+			m_rotated_collision = m_collision.rotate(m_rot);
 		}
 
 		sf::Image const& image() const
@@ -95,7 +97,7 @@ namespace lunar_rescue
 
 		c_collision_mask const& collision_mask() const
 		{
-			return m_collision;
+			return m_rotated_collision;
 		}
 
 		c_vec2i size() const
@@ -106,6 +108,7 @@ namespace lunar_rescue
 	private:
 		sf::Image m_image;
 		c_collision_mask m_collision;
+		c_collision_mask m_rotated_collision;
 		c_vec2i m_pos;
 		c_vec2i m_vel;
 		c_rot m_rot;
