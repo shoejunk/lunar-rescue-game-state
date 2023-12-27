@@ -3,6 +3,7 @@ export module lunar_rescue.game_state;
 export import :rocket;
 
 import std.core;
+import stk.collide;
 import stk.input;
 import stk.math;
 
@@ -10,10 +11,30 @@ using namespace stk;
 
 namespace lunar_rescue
 {
+	template<class T>
+	concept has_collision_mask = requires(T t)
+	{
+		{ t.collision_mask() } -> std::convertible_to<c_collision_mask const&>;
+	};
+
+	template<class T>
+	concept has_pos = requires(T t)
+	{
+		{ t.pos() } -> std::convertible_to<c_vec2i const&>;
+	};
+
 	export template<class T, class U>
-		bool overlaps(T const& a, U const& b)
+	requires has_pos<T> && has_pos<U>
+	bool overlaps(T const& a, U const& b)
 	{
 		return overlaps(a.pos(), a.get_size(), b.pos(), b.get_size());
+	}
+
+	export template<class T, class U>
+	requires has_collision_mask<T> && has_collision_mask<U> && has_pos<T> && has_pos<U>
+	bool overlaps(T const& a, U const& b)
+	{
+		a.collision_mask().overlaps(b.collision_mask(), b.pos() - a.pos());
 	}
 
 	export class c_game_state

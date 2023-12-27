@@ -15,43 +15,100 @@ constexpr int32_t units_per_pixel = 8192;
 
 namespace lunar_rescue
 {
-	export class c_game_object
+	export class c_game_piece
 	{
 	public:
-		c_game_object(c_hash id)
-			: m_id(id)
+		c_game_piece()
 		{
 		}
 
-		c_game_object(c_hash id, c_vec2i pos, c_vec2i extents)
+		c_game_piece(c_vec2i pos)
 			: m_pos(pos)
-			, m_extents(extents)
-			, m_id(id)
 		{
 		}
 
-	private:
-		c_vec2i m_pos;
-		c_vec2i m_extents;
-		c_hash m_id;
-	};
-
-	export class c_game_piece : public c_game_object
-	{
-	public:
-		c_game_piece(c_hash id)
-			: c_game_object(id)
+		void update()
 		{
+			m_pos += m_vel;
 		}
 
-		c_game_piece(c_hash id, c_vec2i pos, c_vec2i extents)
-			: c_game_object(id, pos, extents)
+		c_vec2i pos() const
 		{
+			return m_pos;
+		}
+
+		void pos(c_vec2i pos)
+		{
+			m_pos = pos;
+		}
+
+		c_vec2i vel() const
+		{
+			return m_vel;
+		}
+
+		void vel(c_vec2i vel)
+		{
+			m_vel = vel;
+		}
+
+		c_rot rot() const
+		{
+			return m_rot;
+		}
+
+		float rot_rad() const
+		{
+			return m_rot.angle_rad();
+		}
+
+		float rot_deg() const
+		{
+			return m_rot.angle_deg();
+		}
+
+		void rot(c_rot rot)
+		{
+			m_rot = rot;
+		}
+
+		void accelerate_by(c_vec2i acc)
+		{
+			m_vel += acc;
+		}
+
+		c_vec2i screen_pos() const
+		{
+			return c_vec2i(m_pos * c_vec2i(1, -1)) / units_per_pixel;
+		}
+
+		void image(sf::Texture const& texture)
+		{
+			m_image = texture.copyToImage();
+			m_collision.from(m_image);
+		}
+
+		sf::Image const& image() const
+		{
+			return m_image;
+		}
+
+		c_collision_mask const& collision_mask() const
+		{
+			return m_collision;
+		}
+
+		c_vec2i get_size() const
+		{
+			return { static_cast<int32_t>(m_image.getSize().x), static_cast<int32_t>(m_image.getSize().y) };
 		}
 
 	private:
 		sf::Image m_image;
-
+		c_collision_mask m_collision;
+		c_vec2i m_pos;
+		c_vec2i m_vel;
+		c_rot m_rot;
 	};
 
 	export class c_block
@@ -176,7 +233,7 @@ namespace lunar_rescue
 		c_rot m_rot;
 	};
 
-	export class c_rocket
+	export class c_rocket : public c_game_piece
 	{
 	private:
 		static constexpr int32_t vertical_acc = 64;
@@ -188,18 +245,14 @@ namespace lunar_rescue
 
 	public:
 		c_rocket(std::vector<c_bullet>& bullets)
-			: m_pos(2621440, -2621440)
-			, m_vel(0, 0)
-			, m_rot(0)
+			: c_game_piece(c_vec2i{ 2621440, -2621440 })
 			, m_bullets(bullets)
 			, m_fire_cooldown(0)
 		{
 		}
 
 		c_rocket(std::vector<c_bullet>& bullets, c_vec2i pos)
-			: m_pos(pos)
-			, m_vel(0, 0)
-			, m_rot(0)
+			: c_game_piece(pos)
 			, m_bullets(bullets)
 			, m_fire_cooldown(0)
 		{
@@ -209,104 +262,40 @@ namespace lunar_rescue
 		{
 			m_fire_cooldown = m_fire_cooldown > 0 ? m_fire_cooldown - 1 : 0;
 			c_vec2i const& to_mouse = input.mouse() - screen_pos();
-			m_rot.angle() = std::atan2f((float)to_mouse.y(), (float)to_mouse.x()) * c_rot::deg_180 / std::numbers::pi_v<float> + c_rot::deg_90;
+			rot(std::atan2f((float)to_mouse.y(), (float)to_mouse.x()) * c_rot::deg_180 / std::numbers::pi_v<float> + c_rot::deg_90);
 
 			c_vec2i acc(0, 0);
 
 			if (input["rocket"_h])
 			{
-				acc += c_vec2i{ (int32_t)(std::cosf(m_rot.angle_rad() + std::numbers::pi_v<float> / 2.f) * -vertical_acc),
-					(int32_t)(std::sinf(m_rot.angle_rad() + std::numbers::pi_v<float> / 2.f) * vertical_acc) };
+				acc += c_vec2i{ (int32_t)(std::cosf(rot_rad() + std::numbers::pi_v<float> / 2.f) * -vertical_acc),
+					(int32_t)(std::sinf(rot_rad() + std::numbers::pi_v<float> / 2.f) * vertical_acc) };
 			}
 
 			if (input["fire"_h] && m_fire_cooldown == 0)
 			{
-				c_vec2i pos =
-					m_pos + 
-					c_vec2i{ (int32_t)(std::sinf(m_rot.angle_rad()) * fire_offset.y()), (int32_t)(std::cosf(m_rot.angle_rad()) * fire_offset.y()) };
-				c_vec2i vel = 
-					c_vec2i{ (int32_t)(std::sinf(m_rot.angle_rad()) * bullet_speed), (int32_t)(std::cosf(m_rot.angle_rad()) * bullet_speed) };
-				m_bullets.emplace_back(c_hash(m_rand.rand_int<uint32_t>()), pos, vel, m_rot + 90_deg);
+				c_vec2i bullet_pos = pos() + c_vec2i{ (int32_t)(std::sinf(rot_rad()) * fire_offset.y()), (int32_t)(std::cosf(rot_rad()) * fire_offset.y()) };
+				c_vec2i vel = c_vec2i{ (int32_t)(std::sinf(rot_rad()) * bullet_speed), (int32_t)(std::cosf(rot_rad()) * bullet_speed) };
+				m_bullets.emplace_back(c_hash(m_rand.rand_int<uint32_t>()), bullet_pos, vel, rot() + 90_deg);
 				m_fire_cooldown = fire_cooldown;
 			}
 
 			acc.y() -= gravity;
-			m_vel += acc;
-			m_pos += m_vel;
+			accelerate_by(acc);
+			c_game_piece::update();
 		}
 
-		c_vec2i const& pos() const
-		{
-			return m_pos;
-		}
+		//uint8_t phase_start() const
+		//{
+		//	return 0;
+		//}
 
-		void pos(c_vec2i const& pos)
-		{
-			m_pos = pos;
-		}
-
-		c_vec2i const& vel() const
-		{
-			return m_vel;
-		}
-
-		void vel(c_vec2i const& vel)
-		{
-			m_vel = vel;
-		}
-
-		c_vec2i screen_pos() const
-		{
-			return c_vec2i(m_pos * c_vec2i(1, -1)) / units_per_pixel;
-		}
-
-		c_vec2i const get_size() const
-		{
-			return size;
-		}
-
-		uint8_t phase_start() const
-		{
-			return 0;
-		}
-
-		uint8_t phase_freq() const
-		{
-			return 1;
-		}
-
-		c_rot const& rot() const
-		{
-			return m_rot;
-		}
-
-		float rot_rad() const
-		{
-			return m_rot.angle_rad();
-		}
-
-		float rot_deg() const
-		{
-			return m_rot.angle_deg();
-		}
-
-		void image(sf::Texture const& texture)
-		{
-			m_image = texture.copyToImage();
-			m_collision.from(m_image);
-		}
-
-		sf::Image const& image() const
-		{
-			return m_image;
-		}
+		//uint8_t phase_freq() const
+		//{
+		//	return 1;
+		//}
 
 	private:
-		sf::Image m_image;
-		c_collision_mask m_collision;
-		c_vec2i m_pos;
-		c_vec2i m_vel;
-		c_rot m_rot;
 		std::vector<c_bullet>& m_bullets;
 		uint32_t m_fire_cooldown;
 		c_rand m_rand;
