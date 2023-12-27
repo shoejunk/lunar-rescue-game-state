@@ -98,7 +98,7 @@ namespace lunar_rescue
 			return m_collision;
 		}
 
-		c_vec2i get_size() const
+		c_vec2i size() const
 		{
 			return { static_cast<int32_t>(m_image.getSize().x), static_cast<int32_t>(m_image.getSize().y) };
 		}
@@ -114,7 +114,7 @@ namespace lunar_rescue
 	export class c_block
 	{
 	private:
-		static constexpr c_vec2i size = c_vec2i{ 128 * units_per_pixel, 128 * units_per_pixel };
+		static constexpr c_vec2i block_size = c_vec2i{ 128 * units_per_pixel, 128 * units_per_pixel };
 
 	public:
 		c_block()
@@ -149,9 +149,9 @@ namespace lunar_rescue
 			return c_vec2i(m_pos * c_vec2i(1, -1)) / units_per_pixel;
 		}
 
-		c_vec2i const& get_size() const
+		c_vec2i size() const
 		{
-			return size;
+			return block_size;
 		}
 
 	private:
@@ -241,7 +241,6 @@ namespace lunar_rescue
 		static constexpr uint32_t fire_cooldown = 45;
 		static constexpr c_vec2i fire_offset = c_vec2i{ 0, 42 * units_per_pixel };
 		static constexpr int32_t bullet_speed = 40960;
-		static constexpr c_vec2i size = c_vec2i{ 128 * units_per_pixel, 128 * units_per_pixel };
 
 	public:
 		c_rocket(std::vector<c_bullet>& bullets)

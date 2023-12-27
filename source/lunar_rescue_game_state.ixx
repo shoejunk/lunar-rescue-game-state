@@ -23,11 +23,17 @@ namespace lunar_rescue
 		{ t.pos() } -> std::convertible_to<c_vec2i>;
 	};
 
+	template<class T>
+	concept has_size = requires(T t)
+	{
+		{ t.size() } -> std::convertible_to<c_vec2i>;
+	};
+
 	export template<class T, class U>
-	requires has_pos<T> && has_pos<U>
+	requires has_pos<T> && has_pos<U> && has_size<T> && has_size<U>
 	bool overlaps(T const& a, U const& b)
 	{
-		return overlaps(a.pos(), a.get_size(), b.pos(), b.get_size());
+		return overlaps(a.pos(), a.size(), b.pos(), b.size());
 	}
 
 	export template<class T, class U>
