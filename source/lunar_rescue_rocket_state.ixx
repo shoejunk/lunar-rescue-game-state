@@ -85,7 +85,7 @@ namespace lunar_rescue
 		void image(sf::Texture const& texture)
 		{
 			m_image = texture.copyToImage();
-			m_collision.from(m_image);
+			m_collision.from(m_image, units_per_pixel);
 		}
 
 		sf::Image const& image() const
