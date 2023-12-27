@@ -20,7 +20,7 @@ namespace lunar_rescue
 	template<class T>
 	concept has_pos = requires(T t)
 	{
-		{ t.pos() } -> std::convertible_to<c_vec2i const&>;
+		{ t.pos() } -> std::convertible_to<c_vec2i>;
 	};
 
 	export template<class T, class U>
