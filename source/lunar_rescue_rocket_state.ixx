@@ -100,7 +100,7 @@ namespace lunar_rescue
 
 		c_vec2i size() const
 		{
-			return { static_cast<int32_t>(m_image.getSize().x), static_cast<int32_t>(m_image.getSize().y) };
+			return { static_cast<int32_t>(m_image.getSize().x) * units_per_pixel, static_cast<int32_t>(m_image.getSize().y) * units_per_pixel };
 		}
 
 	private:
