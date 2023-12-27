@@ -92,6 +92,11 @@ namespace lunar_rescue
 			return m_rocket;
 		}
 
+		c_block& block()
+		{
+			return m_block;
+		}
+
 		std::vector<c_bullet> const& bullets() const
 		{
 			return m_bullets;
