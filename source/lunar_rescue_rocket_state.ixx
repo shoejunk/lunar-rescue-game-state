@@ -52,7 +52,7 @@ namespace lunar_rescue
 			m_vel = vel;
 		}
 
-		c_rot rot() const
+		c_angle rot() const
 		{
 			return m_rot;
 		}
@@ -67,7 +67,7 @@ namespace lunar_rescue
 			return m_rot.angle_deg();
 		}
 
-		void rot(c_rot rot)
+		void rot(c_angle rot)
 		{
 			m_rot = rot;
 			m_rotated_collision = m_collision.rotate(rot);
@@ -111,7 +111,7 @@ namespace lunar_rescue
 		c_collision_mask m_rotated_collision;
 		c_vec2i m_pos;
 		c_vec2i m_vel;
-		c_rot m_rot;
+		c_angle m_rot;
 	};
 
 	export class c_block : public c_game_piece
@@ -158,7 +158,7 @@ namespace lunar_rescue
 		{
 		}
 
-		c_bullet(c_hash id, c_vec2i pos, c_vec2i vel, c_rot rot)
+		c_bullet(c_hash id, c_vec2i pos, c_vec2i vel, c_angle rot)
 			: m_pos(pos)
 			, m_vel(vel)
 			, m_id(id)
@@ -176,7 +176,7 @@ namespace lunar_rescue
 			return m_pos;
 		}
 
-		c_rot const& rot() const
+		c_angle const& rot() const
 		{
 			return m_rot;
 		}
@@ -215,7 +215,7 @@ namespace lunar_rescue
 		c_vec2i m_pos;
 		c_vec2i m_vel;
 		c_hash m_id;
-		c_rot m_rot;
+		c_angle m_rot;
 	};
 
 	export class c_rocket : public c_game_piece
@@ -246,7 +246,7 @@ namespace lunar_rescue
 		{
 			m_fire_cooldown = m_fire_cooldown > 0 ? m_fire_cooldown - 1 : 0;
 			c_vec2i const& to_mouse = input.mouse() - screen_pos();
-			rot(std::atan2f((float)to_mouse.y(), (float)to_mouse.x()) * c_rot::deg_180 / std::numbers::pi_v<float> + c_rot::deg_90);
+			rot(std::atan2f((float)to_mouse.y(), (float)to_mouse.x()) * c_angle::deg_180 / std::numbers::pi_v<float> + c_angle::deg_90);
 
 			c_vec2i acc(0, 0);
 
