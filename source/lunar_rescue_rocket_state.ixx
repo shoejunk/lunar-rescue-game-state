@@ -222,6 +222,7 @@ namespace lunar_rescue
 	{
 	private:
 		static constexpr int32_t vertical_acc = 64;
+		static constexpr int32_t vertical_vel = 640;
 		static constexpr int32_t gravity = 16;
 		static constexpr uint32_t fire_cooldown = 45;
 		static constexpr c_vec2i fire_offset = c_vec2i{ 0, 42 * units_per_pixel };
@@ -254,6 +255,12 @@ namespace lunar_rescue
 			{
 				acc += c_vec2i{ (int32_t)(std::cosf(rot_rad() + std::numbers::pi_v<float> / 2.f) * -vertical_acc),
 					(int32_t)(std::sinf(rot_rad() + std::numbers::pi_v<float> / 2.f) * vertical_acc) };
+				vel(c_vec2i{ (int32_t)(std::cosf(rot_rad() + std::numbers::pi_v<float> / 2.f) * -vertical_vel),
+					(int32_t)(std::sinf(rot_rad() + std::numbers::pi_v<float> / 2.f) * vertical_vel) });
+			}
+			else
+			{
+				vel(c_vec2i{ 0, 0 });
 			}
 
 			if (input["fire"_h] && m_fire_cooldown == 0)
@@ -264,8 +271,8 @@ namespace lunar_rescue
 				m_fire_cooldown = fire_cooldown;
 			}
 
-			acc.y() -= gravity;
-			accelerate_by(acc);
+			//acc.y() -= gravity;
+			//accelerate_by(acc);
 			c_game_piece::update();
 		}
 
