@@ -92,6 +92,11 @@ namespace lunar_rescue
 			return m_rocket;
 		}
 
+		c_block const& block() const
+		{
+			return m_block;
+		}
+
 		c_block& block()
 		{
 			return m_block;
