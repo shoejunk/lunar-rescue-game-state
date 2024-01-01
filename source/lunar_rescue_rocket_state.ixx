@@ -129,7 +129,7 @@ namespace lunar_rescue
 		}
 
 		c_block(c_hash id, c_vec2i pos)
-			: m_pos(pos)
+			: c_game_piece(pos)
 			, m_id(id)
 		{
 		}
@@ -140,7 +140,6 @@ namespace lunar_rescue
 		}
 
 	private:
-		c_vec2i m_pos;
 		c_hash m_id;
 	};
 
